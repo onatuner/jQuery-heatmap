@@ -1,0 +1,1 @@
+jQuery Click Heatmap Plug-in
