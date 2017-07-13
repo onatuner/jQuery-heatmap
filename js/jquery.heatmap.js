@@ -1,45 +1,47 @@
-$(document).ready(function(){
-	var script = document.createElement("script");
-    script.src = "jcanvas.min.js";
-    script.type = "text/javascript";
-    document.getElementsByTagName("head")[0].appendChild(script);
+;(function($, window, document, undefined){
+    "use strict"
+    $(document).ready(function(){
+        var defaults ={
+            count: 0, xPage: 0, yPage: 0,
+            heatmapWidth: $(window).width()/3,
+            heatmapHeight: $(window).height()/3,
+        };
 
-    var div = document.createElement("div");
-    div.setAttribute("id", "heatmapDiv1");
-    document.getElementsByTagName("body")[0].appendChild(div);
+        var div = document.createElement("div");
+        div.setAttribute("id", "heatmapDiv1");
+        document.getElementsByTagName("body")[0].appendChild(div);
 
-    var counter = document.createElement("p");
-    counter.setAttribute("id", "heatmapP1");
-    document.getElementById("heatmapDiv1").appendChild(counter);
-    
-    var canvas = document.createElement("canvas");
-    canvas.setAttribute("id", "heatmapCanvas1");
-    document.getElementById("heatmapDiv1").appendChild(canvas);
+        var counter = document.createElement("p");
+        counter.setAttribute("id", "heatmapP1");
+        document.getElementById("heatmapDiv1").appendChild(counter);
+        
+        var canvas = document.createElement("canvas");
+        canvas.setAttribute("id", "heatmapCanvas1");
+        document.getElementById("heatmapDiv1").appendChild(canvas);
+        var context = canvas.getContext("2d");
 
-    var button = document.createElement("button");
-    button.setAttribute("id","heatmapButton1");
-    $(button).text("Show/Hide Heatmap");
-    document.getElementsByTagName("body")[0].appendChild(button);
+        var button = document.createElement("button");
+        button.setAttribute("id","heatmapButton1");
+        $(button).text("Show/Hide Heatmap");
+        document.getElementsByTagName("body")[0].appendChild(button);
+        
+        $(div).hide();
+        setInterval(function(){$(counter).text(defaults.count)},1);
+        $(canvas).css({"width":defaults.heatmapWidth,"height":defaults.heatmapHeight, "border":"1px solid red"});
+        $(button).click(function(){
+            $(div).toggle();
+        });
 
-    var count = 0, xPage = 0, yPage = 0;
-    var windowWidth = $(window).width();
-    var windowHeight = $(window).height();
-    var context = canvas.getContext("2d");
-    
-    $(div).hide();
-    setInterval(function(){$(counter).text(count)},1);
-    $(canvas).css({"width":windowWidth/3,"height":windowHeight/3, "border":"1px solid red"});
-    $(button).click(function(){
-        $(div).toggle();
+        $(document).click(function(){
+            defaults.xPage = event.pageX/3;
+            defaults.yPage = event.pageY/3;
+            
+            context.beginPath();
+            context.moveTo(defaults.xPage, defaults.yPage);
+            context.lineTo(defaults.xPage+1, defaults.yPage);
+            context.stroke();
+            
+            defaults.count += 1;
+        });
     });
-
-    $(document).click(function(){
-        xPage = event.pageX;
-        yPage = event.pageY;
-        count += 1;
-        context.beginPath();
-        context.moveTo(xPage/3, yPage/3);
-        context.lineTo(xPage/3+1, yPage/3);
-        context.stroke();
-    });
-});
+})(jQuery, window, document);
