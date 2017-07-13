@@ -1,4 +1,4 @@
-# jQuery Click Heatmap Plug-in
+# jQuery Click Heatmap Plugin
 
 This plugin appends a canvas at the end of the html and displays the user clicks on that canvas.
 
