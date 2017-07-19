@@ -1,4 +1,4 @@
-;(function($, window, document, undefined){
+;(function($){
     "use strict"
     $.fn.heatmapElement = function(options){
         // Default options, changeable by the user via HTML
@@ -78,4 +78,4 @@
             defaults.count += 1;
         });
     };
-})(jQuery, window, document);
+})(jQuery);
