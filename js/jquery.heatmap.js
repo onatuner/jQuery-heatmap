@@ -1,6 +1,7 @@
 ;(function($, window, document, undefined){
     "use strict"
     $.fn.heatmapElement = function(options){
+        // Default options, changeable by the user via HTML
         var defaults = $.extend({
             count: 0,
             refreshSpeed: 200,
@@ -8,29 +9,31 @@
             heatmapHeight: this.height(),    
         }, options);
         
-        var div = document.createElement("div");
-        var counter = document.createElement("p");
-        var canvas = document.createElement("canvas");
-        var button = document.createElement("button");
-        var context = canvas.getContext("2d");  
+        // Creating the necesaary elements for the heatmap
+        var div = $("<div></div>");
+        var counter = $("<p></p>");
+        var canvas = $("<canvas></canvas>");
+        var button = $("<button>Show/Hide Heatmap</button>");
+        var context = canvas[0].getContext("2d");  
         var $this = $(this);
-        var heatmap = construct(div, counter, canvas, button, context);
+        var heatmap = construct();
 
-        function construct(div, counter, canvas, button, context){
-            document.getElementsByTagName("body")[0].appendChild(div);
-            div.appendChild(counter);
-            div.appendChild(canvas);
-            console.log(defaults.heatmapHeight);
-            console.log(defaults.heatmapWidth);
-            $(canvas).css({"width":defaults.heatmapWidth,"height":defaults.heatmapHeight, "border":"1px solid black"});
-            $(button).text("Show/Hide Heatmap");
-            document.getElementsByTagName("body")[0].appendChild(button);
+        // Constructor funtion: Appends the created elements to their places
+        // and contains the click functions
+        function construct(){
+            $("body").append(div);
+            $("body").append(button);
+            $(div).append(counter);
+
+            $(div).append(canvas);
+            canvas[0].width = defaults.heatmapWidth;
+            canvas[0].height = defaults.heatmapHeight;
+            $(canvas).css({"border":"1px solid black"});
+
             $(div).hide();
             
             return{
                 leftClick: function(xCoor, yCoor){
-                    console.log(xCoor);
-                    console.log(yCoor);
                     context.beginPath();
                     context.lineWidth = "2";
                     context.strokeStyle = "green";
@@ -57,16 +60,21 @@
         $(button).click(function(){
             heatmap.toggleDiv();
         });
+        // Gets the coordinates of the click and passes it to the appropriate function
         $($this).click(function(){
-            var offset = $(this).offset(),
-                     x = event.pageX - offset.left,
-                     y = event.pageY - offset.top;
+            var offset = $(this).offset();
+            var x = event.pageX - offset.left;
+            var y = event.pageY - offset.top;
             
             heatmap.leftClick(x, y);
             defaults.count += 1;
         });
         $($this).contextmenu(function(){
-            heatmap.rightClick(event.pageX, event.pageY)
+            var offset = $(this).offset();
+            var x = event.pageX - offset.left;
+            var y = event.pageY - offset.top;
+            
+            heatmap.rightClick(x, y);
             defaults.count += 1;
         });
     };
