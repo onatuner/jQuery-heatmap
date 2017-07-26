@@ -6,6 +6,11 @@
 <script>
 	$(document).ready(function(){
 		$("h1").heatmapElement();
+		$("h1").heatmapElement({"count": 15});
+		$("h1").heatmapElement({"disableCount": true});
+		$("h1").heatmapElement({"disableButton": true});
+		$("h1").heatmapElement({"refreshSpeed": 1000});
+		$("h1").heatmapElement({"resize": 1.5});
 	});
 </script>
 <style>
