@@ -4,16 +4,22 @@
         // Default options, changeable by the user via HTML
         var defaults = $.extend({
             count: 0,
-            refreshSpeed: 200,
-            heatmapWidth: this.width(),
-            heatmapHeight: this.height(),    
+            disableCount: false,
+            disableButton: false,
+            refreshSpeed: 400,
+            resize: 1,   
         }, options);
         
-        // Creating the necesaary elements for the heatmap
+        var heatmapWidth = this.width();
+        var heatmapHeight = this.height(); 
+
+        // Creating the necessary elements for the heatmap
         var div = $("<div></div>");
         var counter = $("<p></p>");
         var canvas = $("<canvas></canvas>");
-        var button = $("<button>Show/Hide Heatmap</button>");
+        if(!defaults.disableButton){
+            var button = $("<button>Show/Hide Heatmap</button>");
+        }
         var context = canvas[0].getContext("2d");  
         var $this = $(this);
         var heatmap = construct();
@@ -22,12 +28,14 @@
         // and contains the click functions
         function construct(){
             $("body").append(div);
-            $("body").append(button);
+            if(!defaults.disableButton){
+                $("body").append(button);
+            }
             $(div).append(counter);
 
             $(div).append(canvas);
-            canvas[0].width = defaults.heatmapWidth;
-            canvas[0].height = defaults.heatmapHeight;
+            canvas[0].width = heatmapWidth*defaults.resize;
+            canvas[0].height = heatmapHeight*defaults.resize;
             $(canvas).css({"border":"1px solid black"});
 
             $(div).hide();
@@ -54,28 +62,34 @@
                 }
             }
         }
-
-        setInterval(function(){$(counter).text("Total clicks on " + $this.prop("tagName") + " Element: " + defaults.count)}, defaults.refreshSpeed);
-
-        $(button).click(function(){
-            heatmap.toggleDiv();
-        });
+        if(!defaults.disableCount){
+            setInterval(function(){$(counter).text("Total clicks on " + $this.prop("tagName") + " Element: " + defaults.count)}, defaults.refreshSpeed);
+        }
+        if(!defaults.disableButton){
+            $(button).click(function(){
+                heatmap.toggleDiv();
+            });
+        }
         // Gets the coordinates of the click and passes it to the appropriate function
         $($this).click(function(){
             var offset = $(this).offset();
-            var x = event.pageX - offset.left;
-            var y = event.pageY - offset.top;
+            var x = (event.pageX - offset.left)*defaults.resize;
+            var y = (event.pageY - offset.top)*defaults.resize;
             
             heatmap.leftClick(x, y);
-            defaults.count += 1;
+            if(!defaults.disableCount){
+                defaults.count += 1;
+            }
         });
         $($this).contextmenu(function(){
             var offset = $(this).offset();
-            var x = event.pageX - offset.left;
-            var y = event.pageY - offset.top;
+            var x = (event.pageX - offset.left)*defaults.resize;
+            var y = (event.pageY - offset.top)*defaults.resize;
             
             heatmap.rightClick(x, y);
-            defaults.count += 1;
+            if(!defaults.disableCount){
+                defaults.count += 1;
+            }
         });
     };
 })(jQuery);
