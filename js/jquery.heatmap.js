@@ -3,11 +3,11 @@
     $.fn.heatmapElement = function(options){
         // Default options, changeable by the user via HTML
         var defaults = $.extend({
-            count: 0,
-            disableCount: false,
-            disableButton: false,
-            refreshSpeed: 400,
-            resize: 1,   
+            count: 0,   // Sets the starting number for counting
+            disableCount: false, // Enables/disables counting
+            disableButton: false, // Enables/disables the button
+            refreshSpeed: 300, // The refresh speed of the shown count number
+            resize: 1, // Multiplies the heatmap's size with the given value
         }, options);
         
         var heatmapWidth = this.width();
