@@ -63,7 +63,8 @@
             }
         }
         if(!defaults.disableCount){
-            setInterval(function(){$(counter).text("Total clicks on " + $this.prop("tagName") + " Element: " + defaults.count)}, defaults.refreshSpeed);
+            setInterval(function(){$(counter).text("Total clicks on " + $this.prop("tagName") + " Element: " + defaults.count)}, 
+                        defaults.refreshSpeed);
         }
         if(!defaults.disableButton){
             $(button).click(function(){
